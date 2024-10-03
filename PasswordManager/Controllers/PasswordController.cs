@@ -10,7 +10,7 @@ public class PasswordController(IPasswordService passwordService) : ControllerBa
     [HttpGet("/domain/{domain}")]
     public async Task<ApiResponse> GetByDomain(string domain)
     {
-        var passwords = await passwordService.GetByDomain(domain);
+        var passwords = await passwordService.GetByDomainName(domain);
         return ApiResponse.SuccessWithData(passwords);
     }
 }

@@ -1,18 +1,18 @@
 using PasswordManager.Models.Domains;
+using PasswordManager.Models.Dtos;
+using PasswordManager.Repository;
 using PasswordManager.Services.Interfaces;
 
 namespace PasswordManager.Services;
 
-public class PasswordService: IPasswordService
+public class PasswordService(IPasswordRepository passwordRepository) : IPasswordService
 {
-    public async Task<PasswordDomain> GetByDomain(string domain)
+    public async Task<PasswordDomain> GetByDomainName(string domainName)
     {
-        var passwordDomain = new PasswordDomain()
+        var passwordDomain = passwordRepository.GetBy(new PasswordDto()
         {
-            Domain = domain,
-            Id = "2314",
-            Password = "password"
-        };
+            DomainName = domainName
+        });
 
         return passwordDomain;
     }
