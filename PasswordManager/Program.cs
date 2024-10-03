@@ -1,3 +1,5 @@
+using PasswordManager.Repository;
+using PasswordManager.Repository.Interfaces;
 using PasswordManager.Services;
 using PasswordManager.Services.Interfaces;
 
@@ -10,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddTransient<IPasswordService, PasswordService>();
+builder.Services.AddTransient<IPasswordRepository, PasswordRepository>();
 
 var app = builder.Build();
 app.MapControllers();

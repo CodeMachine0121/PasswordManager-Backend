@@ -1,6 +1,7 @@
 using PasswordManager.Models.Domains;
 using PasswordManager.Models.Dtos;
 using PasswordManager.Repository;
+using PasswordManager.Repository.Interfaces;
 using PasswordManager.Services.Interfaces;
 
 namespace PasswordManager.Services;

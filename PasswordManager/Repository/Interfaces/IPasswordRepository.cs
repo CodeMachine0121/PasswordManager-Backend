@@ -1,7 +1,7 @@
 using PasswordManager.Models.Domains;
 using PasswordManager.Models.Dtos;
 
-namespace PasswordManager.Repository;
+namespace PasswordManager.Repository.Interfaces;
 
 public interface IPasswordRepository
 {
