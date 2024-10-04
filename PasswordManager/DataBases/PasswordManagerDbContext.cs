@@ -9,6 +9,6 @@ public class PasswordManagerDbContext(DbContextOptions options): DbContext(optio
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AccountRecord>().ToTable("AccountRecord");
+        modelBuilder.Entity<AccountRecord>().ToTable("AccountRecords");
     }
 }

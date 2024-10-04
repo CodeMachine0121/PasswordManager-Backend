@@ -24,7 +24,7 @@ builder.Services.AddDbContext<PasswordManagerDbContext>(options =>
     connectionString =
         connectionString!.Replace("${DB_SERVER}", Environment.GetEnvironmentVariables()["DB_SERVER"]!.ToString());
     connectionString =
-        connectionString.Replace("${DB_NAME}", "StoredPassword");
+        connectionString.Replace("${DB_NAME}", "PasswordDb");
     connectionString =
         connectionString.Replace("${DB_USER}", Environment.GetEnvironmentVariables()["DB_USER"]!.ToString());
     connectionString =
