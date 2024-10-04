@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PasswordManager.Models.Entities;
 
-public class StoredPassword: BaseEntity
+public class AccountRecord: BaseEntity
 {
     [Required]
     [StringLength(100)]
@@ -11,8 +11,4 @@ public class StoredPassword: BaseEntity
     [Required]
     [StringLength(20)]
     public string AccountName { get; set; }
-
-    [Required]
-    [StringLength(50)]
-    public string Password { get; set; }
 }

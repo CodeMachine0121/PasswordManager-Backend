@@ -9,16 +9,17 @@ namespace PasswordManager.Repository;
 
 public class PasswordRepository(PasswordManagerDbContext dbContext) : IPasswordRepository
 {
-    public DbSet<StoredPassword> StoredPasswords = dbContext.StoredPasswords;
+    private readonly DbSet<AccountRecord> _accountRecord = dbContext.AccountRecord;
 
     public async Task<PasswordDomain> GetBy(PasswordDto dto)
     {
-        var storedPassword = await StoredPasswords.FirstOrDefaultAsync(x => x.DomainName == dto.DomainName);
+        var accountRecord = await _accountRecord.FirstOrDefaultAsync(x => x.DomainName == dto.DomainName);
         
         return new PasswordDomain()
         {
             DomainName = dto.DomainName,
-            Password = storedPassword?.Password ?? string.Empty
+            AccountName = accountRecord!.AccountName,
+            Password = "//TODO: Implement password retrieval"
         };
     }
 }

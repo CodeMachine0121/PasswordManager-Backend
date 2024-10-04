@@ -26,7 +26,7 @@ public class PasswordServiceTests
         GivenPasswordDomain(new PasswordDomain
         {
             DomainName = "any-domain-name",
-            Id = "any-id",
+            AccountName = "any-id",
             Password = "any-password"
         });
 
@@ -36,7 +36,7 @@ public class PasswordServiceTests
         passwordDomain.Should().BeEquivalentTo(new PasswordDomain
         {
             DomainName = "any-domain-name",
-            Id = "any-id",
+            AccountName = "any-id",
             Password = "any-password"
         });
     }

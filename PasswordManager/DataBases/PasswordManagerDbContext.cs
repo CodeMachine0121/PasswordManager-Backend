@@ -5,10 +5,10 @@ namespace PasswordManager.DataBases;
 
 public class PasswordManagerDbContext(DbContextOptions options): DbContext(options)
 {
-    public DbSet<StoredPassword> StoredPasswords { get; set; }
+    public DbSet<AccountRecord> AccountRecord { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<StoredPassword>().ToTable("Passwords");
+        modelBuilder.Entity<AccountRecord>().ToTable("Passwords");
     }
 }
