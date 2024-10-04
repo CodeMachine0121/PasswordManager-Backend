@@ -5,5 +5,5 @@ namespace PasswordManager.Repository.Interfaces;
 
 public interface IPasswordRepository
 {
-    PasswordDomain GetBy(PasswordDto any);
+    Task<PasswordDomain> GetBy(PasswordDto any);
 }

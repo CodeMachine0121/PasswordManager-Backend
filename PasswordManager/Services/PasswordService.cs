@@ -10,7 +10,7 @@ public class PasswordService(IPasswordRepository passwordRepository) : IPassword
 {
     public async Task<PasswordDomain> GetByDomainName(string domainName)
     {
-        var passwordDomain = passwordRepository.GetBy(new PasswordDto()
+        var passwordDomain = await passwordRepository.GetBy(new PasswordDto()
         {
             DomainName = domainName
         });

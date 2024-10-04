@@ -6,7 +6,7 @@ namespace PasswordManager.Repository;
 
 public class PasswordRepository: IPasswordRepository
 {
-    public PasswordDomain GetBy(PasswordDto any)
+    public Task<PasswordDomain> GetBy(PasswordDto any)
     {
         throw new NotImplementedException();
     }
