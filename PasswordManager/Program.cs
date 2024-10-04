@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using PasswordManager.DataBases;
+using PasswordManager.Models.Entities;
 using PasswordManager.Repository;
 using PasswordManager.Repository.Interfaces;
 using PasswordManager.Services;
@@ -13,6 +16,23 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<IPasswordService, PasswordService>();
 builder.Services.AddTransient<IPasswordRepository, PasswordRepository>();
+
+builder.Services.AddDbContext<PasswordManagerDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetValue<string>("Sql");
+
+    connectionString =
+        connectionString!.Replace("${DB_SERVER}", Environment.GetEnvironmentVariables()["DB_SERVER"]!.ToString());
+    connectionString =
+        connectionString.Replace("${DB_NAME}", Environment.GetEnvironmentVariables()["DB_NAME"]!.ToString());
+    connectionString =
+        connectionString.Replace("${DB_USER}", Environment.GetEnvironmentVariables()["DB_USER"]!.ToString());
+    connectionString =
+        connectionString.Replace("${DB_PASS}", Environment.GetEnvironmentVariables()["DB_PASS"]!.ToString());
+
+    options.UseMySQL(connectionString);
+}, ServiceLifetime.Transient);
+
 
 var app = builder.Build();
 app.MapControllers();
