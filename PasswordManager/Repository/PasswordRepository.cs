@@ -59,8 +59,12 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
         });
     }
 
-    public Task Delete(string anyDomainName)
+    public async Task Delete(string anyDomainName)
     {
-        throw new NotImplementedException();
+        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == anyDomainName);
+        _accountRecord.Remove(accountRecord);
+        await dbContext.SaveChangesAsync();
+        
+        await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretAsync($"{anyDomainName}");
     }
 }
