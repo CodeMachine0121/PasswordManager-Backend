@@ -9,14 +9,14 @@ namespace PasswordManager.Controllers;
 [Route("api/[controller]")]
 public class PasswordRecordController(IPasswordRecordService passwordRecordService) : ControllerBase
 {
-    [HttpGet("/domain/{domainName}")]
+    [HttpGet("domain/{domainName}")]
     public async Task<ApiResponse> GetByDomainName(string domainName)
     {
         var passwords = await passwordRecordService.GetByDomainName(domainName);
         return ApiResponse.SuccessWithData(passwords);
     }
     
-    [HttpPost("/domain/{domainName}")]
+    [HttpPost("domain/{domainName}")]
     public async Task<ApiResponse> Insert(string domainName, [FromBody] PasswordRecordRequest request)
     {
         await passwordRecordService.Insert(new PasswordDto
@@ -29,7 +29,7 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
         return ApiResponse.Success();
     }
     
-    [HttpPut("/domain/{domainName}")]
+    [HttpPut("domain/{domainName}")]
     public async Task<ApiResponse> Update(string domainName, [FromBody] PasswordRecordRequest request)
     {
         await passwordRecordService.Update(new PasswordDto
@@ -42,7 +42,7 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
         return ApiResponse.Success();
     }
     
-    [HttpDelete("/domain/{domainName}")]
+    [HttpDelete("domain/{domainName}")]
     public async Task<ApiResponse> Delete(string domainName)
     {
         await passwordRecordService.Delete(domainName);
