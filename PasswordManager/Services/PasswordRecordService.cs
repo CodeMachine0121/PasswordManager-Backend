@@ -22,8 +22,8 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
          await passwordRepository.Insert(passwordDto);
     }
 
-    public Task Update(PasswordDto passwordDto)
+    public async Task Update(PasswordDto passwordDto)
     {
-        throw new NotImplementedException();
+        await passwordRepository.Update(passwordDto);
     }
 }

@@ -44,4 +44,9 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             {dto.AccountName, dto.Password}
         });
     }
+
+    public Task Update(PasswordDto dto)
+    {
+        throw new NotImplementedException();
+    }
 }

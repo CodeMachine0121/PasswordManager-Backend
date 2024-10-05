@@ -54,6 +54,20 @@ public class PasswordRecordServiceTests
         await _passwordRepository.Received().Insert(Arg.Any<PasswordDto>());
     }
 
+    [Test]
+    public async Task should_update_by_repo()
+    {
+        await _passwordRecordService.Update(new PasswordDto()
+        {
+            DomainName = "any-domain-name",
+            AccountName = "any-id",
+            Password = "any-password"
+        });
+        
+        await _passwordRepository.Received().Update(Arg.Any<PasswordDto>());
+        
+    }
+
     private void GivenPasswordDomain(PasswordDomain passwordDomain)
     {
         _passwordRepository.GetBy(Arg.Any<PasswordDto>()).Returns(passwordDomain);
