@@ -6,5 +6,5 @@ namespace PasswordManager.Services.Interfaces;
 public interface IPasswordRecordService
 {
     Task<PasswordDomain> GetByDomainName(string domainName);
-    Task CreatePassword(PasswordDto passwordDto);
+    Task Insert(PasswordDto passwordDto);
 }

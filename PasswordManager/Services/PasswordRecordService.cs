@@ -17,8 +17,8 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
         return passwordDomain;
     }
 
-    public Task CreatePassword(PasswordDto passwordDto)
+    public async Task Insert(PasswordDto passwordDto)
     {
-        throw new NotImplementedException();
+         await passwordRepository.Insert(passwordDto);
     }
 }

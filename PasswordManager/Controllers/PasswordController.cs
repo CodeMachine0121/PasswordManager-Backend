@@ -19,7 +19,7 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
     [HttpPost("/domain/{domainName}")]
     public async Task<ApiResponse> Insert(string domainName, [FromBody] PasswordRecordRequest request)
     {
-        await passwordRecordService.CreatePassword(new PasswordDto
+        await passwordRecordService.Insert(new PasswordDto
         {
             DomainName = domainName,
             AccountName= request.AccountName,

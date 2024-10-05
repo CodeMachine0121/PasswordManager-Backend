@@ -25,4 +25,9 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             Password = secret.Data.Data[accountRecord.AccountName].ToString()!
         };
     }
+
+    public Task Insert(PasswordDto dto)
+    {
+        throw new NotImplementedException();
+    }
 }
