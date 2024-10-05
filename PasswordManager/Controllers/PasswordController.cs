@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Models;
+using PasswordManager.Models.Dtos;
+using PasswordManager.Models.Requests;
 using PasswordManager.Services.Interfaces;
 
 namespace PasswordManager.Controllers;
@@ -12,5 +14,18 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
     {
         var passwords = await passwordRecordService.GetByDomainName(domainName);
         return ApiResponse.SuccessWithData(passwords);
+    }
+    
+    [HttpPost("/domain/{domainName}")]
+    public async Task<ApiResponse> Insert(string domainName, [FromBody] PasswordRecordRequest request)
+    {
+        await passwordRecordService.CreatePassword(new PasswordDto
+        {
+            DomainName = domainName,
+            AccountName= request.AccountName,
+            Password = request.Password
+        });
+        
+        return ApiResponse.Success();
     }
 }

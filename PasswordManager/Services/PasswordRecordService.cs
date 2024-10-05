@@ -16,4 +16,9 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
 
         return passwordDomain;
     }
+
+    public Task CreatePassword(PasswordDto passwordDto)
+    {
+        throw new NotImplementedException();
+    }
 }

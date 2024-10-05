@@ -17,4 +17,12 @@ public class ApiResponse
             Data = data
         };
     }
+
+    public static ApiResponse Success()
+    {
+        return new ApiResponse()
+        {
+            Status = ApiStatus.Success
+        };
+    }
 }
