@@ -8,4 +8,5 @@ public interface IPasswordRepository
     Task<PasswordDomain> GetBy(PasswordDto dto);
     Task Insert(PasswordDto dto);
     Task Update(PasswordDto dto);
+    Task Delete(string anyDomainName);
 }

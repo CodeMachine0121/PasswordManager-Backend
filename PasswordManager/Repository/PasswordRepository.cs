@@ -58,4 +58,9 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             { dto.AccountName, dto.Password }
         });
     }
+
+    public Task Delete(string anyDomainName)
+    {
+        throw new NotImplementedException();
+    }
 }

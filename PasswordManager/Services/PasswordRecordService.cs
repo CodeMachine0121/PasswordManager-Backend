@@ -29,6 +29,6 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
 
     public Task Delete(string domainName)
     {
-        throw new NotImplementedException();
+        return passwordRepository.Delete(domainName);
     }
 }
