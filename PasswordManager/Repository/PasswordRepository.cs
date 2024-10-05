@@ -26,8 +26,22 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
         };
     }
 
-    public Task Insert(PasswordDto dto)
+    public async Task Insert(PasswordDto dto)
     {
-        throw new NotImplementedException();
+        await _accountRecord.AddAsync(new AccountRecord()
+        {
+            DomainName = dto.DomainName,
+            AccountName = dto.AccountName,
+            CreatedOn = DateTimeOffset.Now,
+            ModifiedOn = DateTimeOffset.Now,
+            CreatedBy = "system",
+            ModifiedBy = "system"
+        });
+        await dbContext.SaveChangesAsync();
+        
+        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", new Dictionary<string, object>
+        {
+            {dto.AccountName, dto.Password}
+        });
     }
 }
