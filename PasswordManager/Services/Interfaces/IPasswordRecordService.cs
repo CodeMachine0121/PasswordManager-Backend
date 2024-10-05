@@ -2,7 +2,7 @@ using PasswordManager.Models.Domains;
 
 namespace PasswordManager.Services.Interfaces;
 
-public interface IPasswordService
+public interface IPasswordRecordService
 {
     Task<PasswordDomain> GetByDomainName(string domainName);
 }

@@ -5,12 +5,12 @@ using PasswordManager.Services.Interfaces;
 namespace PasswordManager.Controllers;
 
 [Route("api/[controller]")]
-public class PasswordController(IPasswordService passwordService) : ControllerBase
+public class PasswordRecordController(IPasswordRecordService passwordRecordService) : ControllerBase
 {
-    [HttpGet("/domain/{domain}")]
-    public async Task<ApiResponse> GetByDomain(string domain)
+    [HttpGet("/domain/{domainName}")]
+    public async Task<ApiResponse> GetByDomainName(string domainName)
     {
-        var passwords = await passwordService.GetByDomainName(domain);
+        var passwords = await passwordRecordService.GetByDomainName(domainName);
         return ApiResponse.SuccessWithData(passwords);
     }
 }

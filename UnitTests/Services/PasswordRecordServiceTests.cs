@@ -8,16 +8,16 @@ using PasswordManager.Services;
 namespace UnitTests.Services;
 
 [TestFixture]
-public class PasswordServiceTests
+public class PasswordRecordServiceTests
 {
     private IPasswordRepository _passwordRepository;
-    private PasswordService _passwordService;
+    private PasswordRecordService _passwordRecordService;
 
     [SetUp]
     public void SetUp()
     {
         _passwordRepository = Substitute.For<IPasswordRepository>();
-        _passwordService = new PasswordService(_passwordRepository);
+        _passwordRecordService = new PasswordRecordService(_passwordRepository);
     }
 
     [Test]
@@ -30,7 +30,7 @@ public class PasswordServiceTests
             Password = "any-password"
         });
 
-        var passwordDomain = await _passwordService.GetByDomainName("domain");
+        var passwordDomain = await _passwordRecordService.GetByDomainName("domain");
 
         _passwordRepository.Received().GetBy(Arg.Any<PasswordDto>());
         passwordDomain.Should().BeEquivalentTo(new PasswordDomain

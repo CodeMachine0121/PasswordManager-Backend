@@ -14,7 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddTransient<IPasswordService, PasswordService>();
+builder.Services.AddTransient<IPasswordRecordService, PasswordRecordService>();
 builder.Services.AddTransient<IPasswordRepository, PasswordRepository>();
 
 builder.Services.AddDbContext<PasswordManagerDbContext>(options =>

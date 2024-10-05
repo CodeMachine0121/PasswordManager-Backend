@@ -5,7 +5,7 @@ using PasswordManager.Services.Interfaces;
 
 namespace PasswordManager.Services;
 
-public class PasswordService(IPasswordRepository passwordRepository) : IPasswordService
+public class PasswordRecordService(IPasswordRepository passwordRepository) : IPasswordRecordService
 {
     public async Task<PasswordDomain> GetByDomainName(string domainName)
     {
