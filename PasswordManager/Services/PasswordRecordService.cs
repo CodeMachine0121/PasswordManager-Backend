@@ -26,4 +26,9 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
     {
         await passwordRepository.Update(passwordDto);
     }
+
+    public Task Delete(string domainName)
+    {
+        throw new NotImplementedException();
+    }
 }
