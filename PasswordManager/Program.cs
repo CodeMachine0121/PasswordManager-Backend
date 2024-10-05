@@ -5,6 +5,8 @@ using PasswordManager.Repository;
 using PasswordManager.Repository.Interfaces;
 using PasswordManager.Services;
 using PasswordManager.Services.Interfaces;
+using VaultSharp;
+using VaultSharp.V1.AuthMethods.Token;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,12 @@ builder.Services.AddDbContext<PasswordManagerDbContext>(options =>
     options.UseMySQL(connectionString);
 }, ServiceLifetime.Transient);
 
+builder.Services.AddSingleton<IVaultClient>(_ =>
+{
+    var vaultClientSettings = new VaultClientSettings(builder.Configuration.GetValue<string>("Vault"), new TokenAuthMethodInfo(Environment.GetEnvironmentVariables()["VAULT_TOKEN"]!.ToString()));
+    
+    return new VaultClient(vaultClientSettings);
+});
 
 var app = builder.Build();
 app.MapControllers();
