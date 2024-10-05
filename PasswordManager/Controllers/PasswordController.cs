@@ -28,4 +28,17 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
         
         return ApiResponse.Success();
     }
+    
+    [HttpPut("/domain/{domainName}")]
+    public async Task<ApiResponse> Update(string domainName, [FromBody] PasswordRecordRequest request)
+    {
+        await passwordRecordService.Update(new PasswordDto
+        {
+            DomainName = domainName,
+            AccountName= request.AccountName,
+            Password = request.Password
+        });
+        
+        return ApiResponse.Success();
+    }
 }
