@@ -15,10 +15,10 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
     public async Task<PasswordDomain> GetBy(PasswordDto dto)
     {
         var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
-        
+
         var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{accountRecord.DomainName}");
 
-        return new PasswordDomain()
+        return new PasswordDomain
         {
             DomainName = dto.DomainName,
             AccountName = accountRecord.AccountName,
@@ -28,7 +28,7 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
 
     public async Task Insert(PasswordDto dto)
     {
-        await _accountRecord.AddAsync(new AccountRecord()
+        await _accountRecord.AddAsync(new AccountRecord
         {
             DomainName = dto.DomainName,
             AccountName = dto.AccountName,
@@ -38,15 +38,24 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             ModifiedBy = "system"
         });
         await dbContext.SaveChangesAsync();
-        
+
         await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", new Dictionary<string, object>
         {
-            {dto.AccountName, dto.Password}
+            { dto.AccountName, dto.Password }
         });
     }
 
-    public Task Update(PasswordDto dto)
+    public async Task Update(PasswordDto dto)
     {
-        throw new NotImplementedException();
+        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
+        accountRecord.AccountName = dto.AccountName;
+        accountRecord.ModifiedOn = DateTimeOffset.Now;
+        accountRecord.ModifiedBy = "system";
+        await dbContext.SaveChangesAsync();
+        
+        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", new Dictionary<string, object>
+        {
+            { dto.AccountName, dto.Password }
+        });
     }
 }
