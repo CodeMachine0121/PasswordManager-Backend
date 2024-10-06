@@ -18,7 +18,7 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultApi va
     {
         var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
 
-        var secretData = await vaultApi.GetBy(dto.DomainName);
+        var secretData = await vaultApi.GetByAsync(dto.DomainName);
 
         return secretData.Select(x => new PasswordDomain
         {
@@ -60,7 +60,7 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultApi va
         accountRecord.ModifiedOn = DateTimeOffset.Now;
         accountRecord.ModifiedBy = "system";
 
-        await vaultApi.FirstInsertSecretAsync(dto);
+        await vaultApi.UpdateSecretAsync(dto);
         
         await dbContext.SaveChangesAsync();
     }

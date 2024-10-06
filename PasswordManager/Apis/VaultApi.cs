@@ -19,7 +19,7 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
     {
         try
         {
-            await GetBy(domainName);
+            await GetByAsync(domainName);
             return true;
         }
         catch
@@ -30,13 +30,13 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
 
     public async Task InsertSecretAsync(PasswordDto dto)
     {
-        var secretData = await GetBy(dto.DomainName);
+        var secretData = await GetByAsync(dto.DomainName);
         secretData.Add(dto.AccountName, dto.Password);
             
         await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", secretData, mountPoint: "secret");
     }
 
-    public async Task<IDictionary<string, object>> GetBy(string domainName)
+    public async Task<IDictionary<string, object>> GetByAsync(string domainName)
     {
         var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{domainName}", mountPoint: "secret");
         return secret.Data.Data;
@@ -45,5 +45,12 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
     public async Task DeleteSecretAsync(string domainName)
     {
         await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretAsync($"{domainName}");
+    }
+
+    public async Task UpdateSecretAsync(PasswordDto dto)
+    {
+        var originalSecret = await GetByAsync(dto.DomainName);
+        originalSecret[dto.AccountName] = dto.Password;
+        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", originalSecret, mountPoint: "secret");
     }
 }
