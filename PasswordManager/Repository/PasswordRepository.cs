@@ -61,16 +61,15 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultApi va
         accountRecord.ModifiedBy = "system";
 
         await vaultApi.UpdateSecretAsync(dto);
-        
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task Delete(string domainName)
+    public async Task Delete(PasswordDto dto)
     {
-        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == domainName);
+        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
         _accountRecord.Remove(accountRecord);
         await dbContext.SaveChangesAsync();
         
-        await vaultApi.DeleteSecretAsync(domainName);
+        await vaultApi.DeleteSecretAsync(dto);
     }
 }

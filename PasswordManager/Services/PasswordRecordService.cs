@@ -27,8 +27,8 @@ public class PasswordRecordService(IPasswordRepository passwordRepository) : IPa
         await passwordRepository.Update(passwordDto);
     }
 
-    public Task Delete(string domainName)
+    public Task Delete(PasswordDto dto)
     {
-        return passwordRepository.Delete(domainName);
+        return passwordRepository.Delete(dto);
     }
 }

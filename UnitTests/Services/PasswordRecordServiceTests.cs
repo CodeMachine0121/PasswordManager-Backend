@@ -73,9 +73,9 @@ public class PasswordRecordServiceTests
     [Test]
     public void should_delete_by_repo()
     {
-        _passwordRecordService.Delete("any-domain-name");
+        _passwordRecordService.Delete(new PasswordDto());
 
-        _passwordRepository.Received().Delete("any-domain-name");
+        _passwordRepository.Received().Delete(Arg.Any<PasswordDto>());
     }
 
     private void GivenPasswordDomain(PasswordDomain passwordDomain)

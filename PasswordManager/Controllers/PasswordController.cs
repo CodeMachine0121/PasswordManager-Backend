@@ -42,10 +42,15 @@ public class PasswordRecordController(IPasswordRecordService passwordRecordServi
         return ApiResponse.Success();
     }
     
-    [HttpDelete("domain/{domainName}")]
-    public async Task<ApiResponse> Delete(string domainName)
+    [HttpDelete("domain/{domainName}/account/{accountName}")]
+    public async Task<ApiResponse> Delete(string domainName, string accountName)
     {
-        await passwordRecordService.Delete(domainName);
+        await passwordRecordService.Delete(new PasswordDto()
+        {
+            DomainName = domainName,
+            AccountName = accountName
+        });
+        
         return ApiResponse.Success();
     }
 }

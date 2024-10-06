@@ -42,9 +42,11 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
         return secret.Data.Data;
     }
 
-    public async Task DeleteSecretAsync(string domainName)
+    public async Task DeleteSecretAsync(PasswordDto dto)
     {
-        await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretAsync($"{domainName}");
+        var originalSecret = await GetByAsync(dto.DomainName);
+        originalSecret.Remove(dto.AccountName);
+        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", originalSecret, mountPoint: "secret");
     }
 
     public async Task UpdateSecretAsync(PasswordDto dto)
