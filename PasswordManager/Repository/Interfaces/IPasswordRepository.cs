@@ -5,7 +5,7 @@ namespace PasswordManager.Repository.Interfaces;
 
 public interface IPasswordRepository
 {
-    Task<PasswordDomain> GetBy(PasswordDto dto);
+    Task<List<PasswordDomain>> GetBy(PasswordDto dto);
     Task Insert(PasswordDto dto);
     Task Update(PasswordDto dto);
     Task Delete(string anyDomainName);

@@ -10,8 +10,8 @@ namespace UnitTests.Services;
 [TestFixture]
 public class PasswordRecordServiceTests
 {
-    private IPasswordRepository _passwordRepository;
     private PasswordRecordService _passwordRecordService;
+    private IPasswordRepository _passwordRepository;
 
     [SetUp]
     public void SetUp()
@@ -33,11 +33,14 @@ public class PasswordRecordServiceTests
         var passwordDomain = await _passwordRecordService.GetByDomainName("domain");
 
         _passwordRepository.Received().GetBy(Arg.Any<PasswordDto>());
-        passwordDomain.Should().BeEquivalentTo(new PasswordDomain
+        passwordDomain.Should().BeEquivalentTo(new List<PasswordDomain>
         {
-            DomainName = "any-domain-name",
-            AccountName = "any-id",
-            Password = "any-password"
+            new()
+            {
+                DomainName = "any-domain-name",
+                AccountName = "any-id",
+                Password = "any-password"
+            }
         });
     }
 
@@ -50,34 +53,36 @@ public class PasswordRecordServiceTests
             AccountName = "any-id",
             Password = "any-password"
         });
-        
+
         await _passwordRepository.Received().Insert(Arg.Any<PasswordDto>());
     }
 
     [Test]
     public async Task should_update_by_repo()
     {
-        await _passwordRecordService.Update(new PasswordDto()
+        await _passwordRecordService.Update(new PasswordDto
         {
             DomainName = "any-domain-name",
             AccountName = "any-id",
             Password = "any-password"
         });
-        
+
         await _passwordRepository.Received().Update(Arg.Any<PasswordDto>());
-        
     }
 
     [Test]
     public void should_delete_by_repo()
     {
         _passwordRecordService.Delete("any-domain-name");
-        
+
         _passwordRepository.Received().Delete("any-domain-name");
     }
 
     private void GivenPasswordDomain(PasswordDomain passwordDomain)
     {
-        _passwordRepository.GetBy(Arg.Any<PasswordDto>()).Returns(passwordDomain);
+        _passwordRepository.GetBy(Arg.Any<PasswordDto>()).Returns(new List<PasswordDomain>()
+        {
+            passwordDomain
+        });
     }
 }

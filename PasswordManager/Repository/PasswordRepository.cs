@@ -12,18 +12,18 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
 {
     private readonly DbSet<AccountRecord> _accountRecord = dbContext.AccountRecord;
 
-    public async Task<PasswordDomain> GetBy(PasswordDto dto)
+    public async Task<List<PasswordDomain>> GetBy(PasswordDto dto)
     {
         var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
 
         var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{accountRecord.DomainName}");
-
-        return new PasswordDomain
+        
+        return secret.Data.Data.Select(x => new PasswordDomain
         {
-            DomainName = dto.DomainName,
-            AccountName = accountRecord.AccountName,
-            Password = secret.Data.Data[accountRecord.AccountName].ToString()!
-        };
+            DomainName = accountRecord.DomainName,
+            AccountName = x.Key,
+            Password = x.Value.ToString()!
+        }).ToList();
     }
 
     public async Task Insert(PasswordDto dto)

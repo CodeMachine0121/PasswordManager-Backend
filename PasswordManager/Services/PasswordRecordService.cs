@@ -7,7 +7,7 @@ namespace PasswordManager.Services;
 
 public class PasswordRecordService(IPasswordRepository passwordRepository) : IPasswordRecordService
 {
-    public async Task<PasswordDomain> GetByDomainName(string domainName)
+    public async Task<List<PasswordDomain>> GetByDomainName(string domainName)
     {
         var passwordDomain = await passwordRepository.GetBy(new PasswordDto()
         {
