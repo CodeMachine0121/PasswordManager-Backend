@@ -16,7 +16,7 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
     {
         var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
 
-        var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{accountRecord.DomainName}");
+        var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{accountRecord.DomainName}", mountPoint:"secret");
         
         return secret.Data.Data.Select(x => new PasswordDomain
         {
@@ -37,12 +37,13 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             CreatedBy = "system",
             ModifiedBy = "system"
         });
-        await dbContext.SaveChangesAsync();
+        
+        var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{dto.DomainName}", mountPoint:"secret");
+        secret?.Data.Data.Add(dto.AccountName, dto.Password);
 
-        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", new Dictionary<string, object>
-        {
-            { dto.AccountName, dto.Password }
-        });
+        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", secret!.Data.Data, mountPoint:"secret");
+        
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task Update(PasswordDto dto)
