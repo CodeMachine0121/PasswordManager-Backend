@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
+using PasswordManager.Apis;
+using PasswordManager.Apis.Interfaces;
 using PasswordManager.DataBases;
 using PasswordManager.Models.Domains;
 using PasswordManager.Models.Dtos;
 using PasswordManager.Models.Entities;
 using PasswordManager.Repository.Interfaces;
-using VaultSharp;
+using VaultSharp.Core;
 
 namespace PasswordManager.Repository;
 
-public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient vaultClient) : IPasswordRepository
+public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultApi vaultApi) : IPasswordRepository
 {
     private readonly DbSet<AccountRecord> _accountRecord = dbContext.AccountRecord;
 
@@ -16,9 +18,9 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
     {
         var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
 
-        var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{accountRecord.DomainName}", mountPoint:"secret");
-        
-        return secret.Data.Data.Select(x => new PasswordDomain
+        var secretData = await vaultApi.GetBy(dto.DomainName);
+
+        return secretData.Select(x => new PasswordDomain
         {
             DomainName = accountRecord.DomainName,
             AccountName = x.Key,
@@ -37,12 +39,17 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
             CreatedBy = "system",
             ModifiedBy = "system"
         });
-        
-        var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync($"{dto.DomainName}", mountPoint:"secret");
-        secret?.Data.Data.Add(dto.AccountName, dto.Password);
 
-        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", secret!.Data.Data, mountPoint:"secret");
-        
+
+        if (await vaultApi.IsDataExist(dto.DomainName))
+        {
+           await vaultApi.InsertSecretAsync(dto); 
+        }
+        else
+        {
+            await vaultApi.FirstInsertSecretAsync(dto);
+        }
+
         await dbContext.SaveChangesAsync();
     }
 
@@ -52,20 +59,18 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultClient
         accountRecord.AccountName = dto.AccountName;
         accountRecord.ModifiedOn = DateTimeOffset.Now;
         accountRecord.ModifiedBy = "system";
-        await dbContext.SaveChangesAsync();
+
+        await vaultApi.FirstInsertSecretAsync(dto);
         
-        await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", new Dictionary<string, object>
-        {
-            { dto.AccountName, dto.Password }
-        });
+        await dbContext.SaveChangesAsync();
     }
 
-    public async Task Delete(string anyDomainName)
+    public async Task Delete(string domainName)
     {
-        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == anyDomainName);
+        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == domainName);
         _accountRecord.Remove(accountRecord);
         await dbContext.SaveChangesAsync();
         
-        await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretAsync($"{anyDomainName}");
+        await vaultApi.DeleteSecretAsync(domainName);
     }
 }

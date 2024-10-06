@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using PasswordManager.Apis;
+using PasswordManager.Apis.Interfaces;
 using PasswordManager.DataBases;
 using PasswordManager.Models.Entities;
 using PasswordManager.Repository;
@@ -18,6 +20,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<IPasswordRecordService, PasswordRecordService>();
 builder.Services.AddTransient<IPasswordRepository, PasswordRepository>();
+builder.Services.AddTransient<IVaultApi, VaultApi>();
 
 builder.Services.AddDbContext<PasswordManagerDbContext>(options =>
 {
