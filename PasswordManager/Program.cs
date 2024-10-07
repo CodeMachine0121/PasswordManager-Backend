@@ -18,6 +18,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
+
 builder.Services.AddTransient<IPasswordRecordService, PasswordRecordService>();
 builder.Services.AddTransient<IPasswordRepository, PasswordRepository>();
 builder.Services.AddTransient<IVaultApi, VaultApi>();
@@ -56,4 +68,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.Run();
