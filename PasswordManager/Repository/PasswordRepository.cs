@@ -16,7 +16,11 @@ public class PasswordRepository(PasswordManagerDbContext dbContext, IVaultApi va
 
     public async Task<List<PasswordDomain>> GetBy(PasswordDto dto)
     {
-        var accountRecord = await _accountRecord.FirstAsync(x => x.DomainName == dto.DomainName);
+        var accountRecord = await _accountRecord.FirstOrDefaultAsync(x => x.DomainName == dto.DomainName);
+        if (accountRecord == null)
+        {
+            return [];
+        }
 
         var secretData = await vaultApi.GetByAsync(dto.DomainName);
 
