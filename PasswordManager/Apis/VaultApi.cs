@@ -1,4 +1,5 @@
 using PasswordManager.Apis.Interfaces;
+using PasswordManager.Models.Domains;
 using PasswordManager.Models.Dtos;
 using VaultSharp;
 
@@ -54,5 +55,14 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
         var originalSecret = await GetByAsync(dto.DomainName);
         originalSecret[dto.AccountName] = dto.Password;
         await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync($"{dto.DomainName}", originalSecret, mountPoint: "secret");
+    }
+
+    public async Task<SealStatusDomain> GetSealStatus()
+    {
+        var sealStatus = await vaultClient.V1.System.GetSealStatusAsync();
+        return new SealStatusDomain
+        {
+            Sealed = sealStatus.Sealed,
+        };
     }
 }
