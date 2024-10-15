@@ -12,4 +12,5 @@ public interface IVaultApi
     Task DeleteSecretAsync(PasswordDto dto);
     Task UpdateSecretAsync(PasswordDto dto);
     Task<SealStatusDomain> GetSealStatus();
+    Task UnsealAsync(string key);
 }

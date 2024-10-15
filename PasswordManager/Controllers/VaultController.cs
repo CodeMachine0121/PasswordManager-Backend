@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Apis.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Models.Requests;
 
 namespace PasswordManager.Controllers;
 
@@ -12,6 +13,13 @@ public class VaultController(IVaultApi vaultApi): ControllerBase
     {
         var sealStatus = await vaultApi.GetSealStatus();
         return ApiResponse.SuccessWithData(sealStatus);
+    }
+    
+    [HttpPost("seal/unseal")]
+    public async Task<ApiResponse> Unseal([FromBody] UnsealRequest request)
+    {
+        await vaultApi.UnsealAsync(request.Key);
+        return ApiResponse.Success();
     }
     
 }

@@ -65,4 +65,9 @@ public class VaultApi(IVaultClient vaultClient): IVaultApi
             Sealed = sealStatus.Sealed,
         };
     }
+    
+    public async Task UnsealAsync(string key)
+    {
+        await vaultClient.V1.System.UnsealAsync(key);
+    }
 }
